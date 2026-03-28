@@ -1,0 +1,182 @@
+[
+  {
+    "id": "TC001",
+    "category": "Returns & Refunds",
+    "title": "Standard Return Request",
+    "ticket": "I bought a sweater last week (order #45678) but it doesn't fit. Can I return it for a refund? I still have all the tags on it.",
+    "expected_policy": "POL-001",
+    "expected_elements": [
+      "30-day return window",
+      "Original condition required",
+      "Refund timeline 5-7 business days"
+    ]
+  },
+  {
+    "id": "TC002",
+    "category": "Shipping & Delivery",
+    "title": "Lost Package",
+    "ticket": "My order #78901 shows delivered 3 days ago but I never received it. I checked with neighbors and my building's mailroom. What can I do?",
+    "expected_policy": "POL-002",
+    "expected_elements": [
+      "Wait 24 hours recommendation",
+      "Investigation process",
+      "Replacement or refund after investigation"
+    ]
+  },
+  {
+    "id": "TC003",
+    "category": "Order Cancellation",
+    "title": "Cancel Order Before Shipment",
+    "ticket": "I just placed order #11223 about 30 minutes ago but I need to cancel it. I ordered the wrong size. Can you cancel it?",
+    "expected_policy": "POL-012",
+    "expected_elements": [
+      "Within 1 hour - instant cancellation",
+      "Self-service option",
+      "Full refund"
+    ]
+  },
+  {
+    "id": "TC004",
+    "category": "Damaged Item",
+    "title": "Item Damaged in Transit",
+    "ticket": "Order #33445 arrived today but the glass vase inside was shattered. The box looked fine from outside but the item is completely broken. I have photos.",
+    "expected_policy": "POL-002",
+    "expected_elements": [
+      "Report within 48 hours",
+      "Photos required",
+      "Full refund or replacement"
+    ]
+  },
+  {
+    "id": "TC005",
+    "category": "Promotions",
+    "title": "Expired Coupon Code",
+    "ticket": "I'm trying to use code SUMMER20 but it says expired. I received the email last month. Can you still honor it?",
+    "expected_policy": "POL-009",
+    "expected_elements": [
+      "No extensions on expired codes",
+      "Check expiration date",
+      "Sign up for new codes"
+    ]
+  },
+  {
+    "id": "TC006",
+    "category": "Wrong Item",
+    "title": "Received Wrong Item",
+    "ticket": "I ordered a blue shirt (order #55667) but received a red one instead. I need the blue one for an event next week.",
+    "expected_policy": "POL-001",
+    "expected_elements": [
+      "Free return shipping",
+      "Free replacement",
+      "15% discount for inconvenience"
+    ]
+  },
+  {
+    "id": "TC007",
+    "category": "Payment Issues",
+    "title": "Payment Declined",
+    "ticket": "I'm trying to place an order but my credit card keeps getting declined. I know there's money on it. What's wrong?",
+    "expected_policy": "POL-004",
+    "expected_elements": [
+      "Common decline reasons",
+      "Contact card issuer",
+      "Try alternative payment"
+    ]
+  },
+  {
+    "id": "TC008",
+    "category": "Gift Cards",
+    "title": "Gift Card Not Working",
+    "ticket": "I received a $50 gift card for my birthday but when I try to use it at checkout, it says invalid code. The code is GC123456789.",
+    "expected_policy": "POL-007",
+    "expected_elements": [
+      "Verify code entered correctly",
+      "Check balance online",
+      "Contact support if issues persist"
+    ]
+  },
+  {
+    "id": "TC009",
+    "category": "Shipping Delay",
+    "title": "Tracking Not Updated",
+    "ticket": "My order #99887 was supposed to arrive yesterday with standard shipping. Tracking hasn't updated in 5 days. Order was placed 10 days ago.",
+    "expected_policy": "POL-002",
+    "expected_elements": [
+      "5+ days no movement - contact support",
+      "Investigation with carrier",
+      "Replacement or refund if lost"
+    ]
+  },
+  {
+    "id": "TC010",
+    "category": "Missing Items",
+    "title": "Incomplete Order",
+    "ticket": "I received my order #44556 today but only got 2 of the 3 items I ordered. The packing slip shows all 3 items but one is missing from the box.",
+    "expected_policy": "POL-001",
+    "expected_elements": [
+      "Report missing items",
+      "Provide order number",
+      "Replacement or refund"
+    ]
+  },
+  {
+    "id": "TC011",
+    "category": "Loyalty Program",
+    "title": "Missing Loyalty Points",
+    "ticket": "I made a purchase last week (order #77889) for $150 but the points haven't shown up in my account yet. When will I get them?",
+    "expected_policy": "POL-008",
+    "expected_elements": [
+      "Points post within 24 hours of delivery",
+      "Check points history",
+      "Contact support if not credited"
+    ]
+  },
+  {
+    "id": "TC012",
+    "category": "Price Match",
+    "title": "Price Match Request",
+    "ticket": "I bought a TV yesterday for $599 (order #22334) but I just saw it on BestBuy.com for $549. Can you match that price?",
+    "expected_policy": "POL-006",
+    "expected_elements": [
+      "14-day window for price match",
+      "Proof required",
+      "Refund of difference"
+    ]
+  },
+  {
+    "id": "TC013",
+    "category": "Warranty",
+    "title": "Defective Product Within Warranty",
+    "ticket": "I bought a coffee maker 3 months ago (order #66778) and it stopped working. It just won't turn on anymore. Is this covered under warranty?",
+    "expected_policy": "POL-005",
+    "expected_elements": [
+      "1-year warranty for appliances",
+      "Manufacturing defects covered",
+      "Replacement or repair"
+    ]
+  },
+  {
+    "id": "TC014",
+    "category": "International Shipping",
+    "title": "International Delivery Question",
+    "ticket": "I want to order a gift for my friend in Canada. Do you ship there and how long does it take?",
+    "expected_policy": "POL-002",
+    "expected_elements": [
+      "Canada: 7-14 business days",
+      "Customer responsible for customs",
+      "Shipping cost calculated at checkout"
+    ]
+  },
+  {
+    "id": "TC015",
+    "category": "Account Issues",
+    "title": "Cannot Access Account",
+    "ticket": "I can't log into my account. I tried resetting my password but I'm not receiving the reset email. My email is correct in the system.",
+    "expected_policy": "POL-003",
+    "expected_elements": [
+      "Password reset via email",
+      "Check spam folder",
+      "Contact support for locked accounts"
+    ]
+  }
+]

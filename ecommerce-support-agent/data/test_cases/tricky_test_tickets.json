@@ -1,0 +1,137 @@
+[
+  {
+    "id": "TRICKY-001",
+    "category": "Conflicting Policies - Regional",
+    "title": "California Final Sale Return",
+    "ticket": "I'm in California and bought a clearance item marked 60% off (order #CAL-123). It's final sale but I want to return it. I know California has special consumer protection laws. Can I return this?",
+    "expected_behavior": "Should identify conflict between final sale policy and California 7-day return law, apply California exception",
+    "expected_policy": "POL-001, Section 6.1",
+    "tricky_aspect": "Regional law overrides standard final sale policy"
+  },
+  {
+    "id": "TRICKY-002",
+    "category": "Conflicting Policies - Marketplace vs First Party",
+    "title": "Marketplace Seller Return Confusion",
+    "ticket": "I bought a laptop from your site (order #MKT-456) but now I see it was from a third-party seller. Your policy says 30 days but the seller says 14 days. Which applies? I'm on day 20.",
+    "expected_behavior": "Should identify marketplace seller item, explain seller's policy applies, check if platform guarantee can help",
+    "expected_policy": "POL-001, Section 7",
+    "tricky_aspect": "Different return windows for marketplace vs first-party"
+  },
+  {
+    "id": "TRICKY-003",
+    "category": "Exception-Heavy - Perishables",
+    "title": "Perishable Item Arrived Spoiled",
+    "ticket": "My grocery order #FOOD-789 arrived 2 days ago with melted ice cream and warm meat. I took photos immediately but didn't report it until now (48 hours later). Can I get a refund?",
+    "expected_behavior": "Should check 24-hour photo requirement for perishables, customer is outside window but has photos",
+    "expected_policy": "POL-001, Section 3.3",
+    "tricky_aspect": "Perishable exception with strict 24-hour reporting window"
+  },
+  {
+    "id": "TRICKY-004",
+    "category": "Exception-Heavy - Hygiene Items",
+    "title": "Opened Cosmetics Return",
+    "ticket": "I bought a $75 face cream (order #COSM-321) but it's causing an allergic reaction. I opened it and used it once. Can I return it even though it's a hygiene item?",
+    "expected_behavior": "Should identify hygiene item non-returnable once opened, no exception for allergic reactions in policy",
+    "expected_policy": "POL-001, Section 3.2",
+    "tricky_aspect": "Hygiene items cannot be returned once opened, even with valid reason"
+  },
+  {
+    "id": "TRICKY-005",
+    "category": "Exception-Heavy - Custom Items",
+    "title": "Custom Engraved Item - Customer Changed Mind",
+    "ticket": "I ordered a custom engraved watch (order #CUST-555) with my initials but I changed my mind about the engraving. It arrived perfectly as I ordered but I want to return it. Can I?",
+    "expected_behavior": "Should identify custom item non-returnable, no error on company's part, customer changed mind not valid reason",
+    "expected_policy": "POL-001, Section 3.4",
+    "tricky_aspect": "Custom items only returnable if company error, not customer preference change"
+  },
+  {
+    "id": "TRICKY-006",
+    "category": "Ambiguous - Missing Critical Info",
+    "title": "Vague Complaint No Order Number",
+    "ticket": "I ordered something last month and it never arrived. I want my money back. This is unacceptable!",
+    "expected_behavior": "Should identify missing order number, purchase date, item details, shipping address - request clarifying information",
+    "expected_policy": "N/A - Triage should catch missing info",
+    "tricky_aspect": "Insufficient information to process, needs clarifying questions"
+  },
+  {
+    "id": "TRICKY-007",
+    "category": "Ambiguous - Unclear Issue",
+    "title": "Confusing Multi-Issue Ticket",
+    "ticket": "My order has problems. Some items are wrong, one is damaged, and I also want to cancel part of it. Also, I used a coupon that didn't work right. Order #CONF-999.",
+    "expected_behavior": "Should break down into multiple issues, ask customer to prioritize or address each separately",
+    "expected_policy": "Multiple policies apply",
+    "tricky_aspect": "Multiple issues in one ticket requiring clarification"
+  },
+  {
+    "id": "TRICKY-008",
+    "category": "Not in Policy - Unreasonable Timeframe",
+    "title": "Return After 6 Months",
+    "ticket": "I bought a jacket 6 months ago (order #OLD-111) and just noticed a small stain on it. I want a full refund. I'm a loyal customer and this is unacceptable quality.",
+    "expected_behavior": "Should identify request outside 30-day window, not covered by policy, escalate to human review",
+    "expected_policy": "POL-001, Section 1.1 (30-day window)",
+    "tricky_aspect": "Request far outside policy timeframe, must abstain/escalate"
+  },
+  {
+    "id": "TRICKY-009",
+    "category": "Not in Policy - Competitor Price Match",
+    "title": "Price Match With Unauthorized Retailer",
+    "ticket": "I bought a TV for $599 (order #TV-222) but I found it on some random website called 'CheapTVsRUs.com' for $399. Can you match that price?",
+    "expected_behavior": "Should check price match policy for authorized retailers, if not specified, escalate",
+    "expected_policy": "POL-006 (Price Match)",
+    "tricky_aspect": "Policy may not specify which retailers are valid for price match"
+  },
+  {
+    "id": "TRICKY-010",
+    "category": "Not in Policy - Goodwill Request",
+    "title": "Compensation for Emotional Distress",
+    "ticket": "My order was late (order #LATE-333) and I missed my daughter's birthday because of it. I want $500 compensation for emotional distress and ruining her special day.",
+    "expected_behavior": "Should identify no policy for emotional distress compensation, escalate to human review",
+    "expected_policy": "N/A - Not covered",
+    "tricky_aspect": "Emotional damages not covered by standard policies, requires human judgment"
+  },
+  {
+    "id": "TRICKY-011",
+    "category": "Conflicting Policies - Restocking Fee Exception",
+    "title": "Large Item Return - Defective vs Preference",
+    "ticket": "I bought a $600 TV (order #TV-444) and want to return it because I found a better deal elsewhere. I know there's a restocking fee but the TV also has a tiny scratch on the frame. Does the fee still apply?",
+    "expected_behavior": "Should identify 15% restocking fee for electronics >$500, but waived if defective - needs to verify if scratch is defect or cosmetic",
+    "expected_policy": "POL-001, Section 8",
+    "tricky_aspect": "Customer may be claiming defect to avoid restocking fee"
+  },
+  {
+    "id": "TRICKY-012",
+    "category": "Exception-Heavy - Final Sale with Defect",
+    "title": "Final Sale Item Arrived Defective",
+    "ticket": "I bought a clearance dress marked 70% off (order #SALE-666). It was final sale but it arrived with a broken zipper. Can I return it even though it's final sale?",
+    "expected_behavior": "Should identify final sale item but defective items are always returnable regardless of final sale status",
+    "expected_policy": "POL-001, Section 3.1 and 4.1",
+    "tricky_aspect": "Defect exception overrides final sale restriction"
+  },
+  {
+    "id": "TRICKY-013",
+    "category": "Not in Policy - Bulk Order Discount",
+    "title": "Request for Bulk Discount Not in Policy",
+    "ticket": "I want to order 100 units of product SKU-999 for my business. Can you give me a 40% bulk discount? I'll be a repeat customer.",
+    "expected_behavior": "Should identify no bulk discount policy exists, escalate to sales/business team",
+    "expected_policy": "N/A - Not covered",
+    "tricky_aspect": "B2B request not covered by consumer policies"
+  },
+  {
+    "id": "TRICKY-014",
+    "category": "Ambiguous - Possible Fraud",
+    "title": "Suspicious Multiple Return Request",
+    "ticket": "I need to return 15 items from my last 20 orders. They all have various issues. Can you process all these returns at once? Orders: #R1, #R2, #R3... #R15.",
+    "expected_behavior": "Should identify potential return fraud pattern (>40% return rate), may require additional documentation per policy",
+    "expected_policy": "POL-001, Section 12.1",
+    "tricky_aspect": "Fraud prevention policy may trigger additional verification"
+  },
+  {
+    "id": "TRICKY-015",
+    "category": "Conflicting Policies - International + Marketplace",
+    "title": "International Marketplace Return",
+    "ticket": "I'm in Germany and bought from a marketplace seller on your platform (order #EU-777). The item is defective. Who handles the return - you or the seller? And do I pay return shipping from Germany?",
+    "expected_behavior": "Should identify multiple policy layers: EU 14-day right, marketplace seller policy, international return costs, platform guarantee for defects",
+    "expected_policy": "POL-001, Sections 6.2 and 7",
+    "tricky_aspect": "Multiple overlapping policies: international + marketplace + defect"
+  }
+]

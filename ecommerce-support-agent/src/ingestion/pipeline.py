@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from src.ingestion.document_loader import DocumentLoader
 from src.ingestion.text_chunker import TextChunker
-from src.retrieval.vector_store import VectorStore
+from src.retrieval.vector_store_multi import VectorStore
 
 
 class IngestionPipeline:
