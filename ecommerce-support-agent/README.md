@@ -32,7 +32,6 @@ ecommerce-support-agent/
 ├── evaluation/          # Evaluation results (generated at runtime)
 ├── examples/
 │   └── example_outputs/ # 3 annotated example runs
-├── app.py               # Gradio web UI
 ├── .env.example
 ├── requirements.txt
 └── README.md
