@@ -6,7 +6,7 @@ langchain-openai==0.1.7
 langchain-community==0.0.38
 
 # Vector Store & Embeddings
-faiss-cpu==1.8.0
+chromadb==0.4.22
 sentence-transformers==2.6.1
 
 # Document Processing

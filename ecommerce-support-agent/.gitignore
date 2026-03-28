@@ -24,6 +24,7 @@ build/
 *.faiss
 *.index
 vector_store/
+chroma_db/
 *.pkl
 *.pickle
 

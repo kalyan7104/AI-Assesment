@@ -80,7 +80,7 @@ python src/evaluation/run_evaluation.py
 ## 🛠️ Technology Stack
 
 - **Framework**: CrewAI
-- **Vector Store**: FAISS
+- **Vector Store**: ChromaDB
 - **Embeddings**: OpenAI text-embedding-3-small
 - **LLM**: GPT-4
 - **Language**: Python 3.9+
