@@ -7,6 +7,7 @@
 
 ## Architecture Overview
 
+
 A 5-agent sequential RAG pipeline. Each agent receives the outputs of all prior agents as context.
 
 ```

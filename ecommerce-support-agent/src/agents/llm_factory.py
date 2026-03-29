@@ -1,5 +1,6 @@
 """
 LLM factory to create language models based on provider configuration.
+Supports: OpenAI, Google Gemini, Groq
 """
 import os
 
@@ -24,5 +25,9 @@ def get_llm(temperature: float = 0.1):
         model = os.getenv("GOOGLE_MODEL", "gemini-1.5-flash")
         return f"google/{model}"
     
+    elif provider == "groq":
+        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        return f"groq/{model}"
+    
     else:
-        raise ValueError(f"Unsupported LLM provider: {provider}. Use 'openai' or 'google'")
+        raise ValueError(f"Unsupported LLM provider: {provider}. Use 'openai', 'google', or 'groq'")

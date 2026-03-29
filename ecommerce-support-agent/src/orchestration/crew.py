@@ -28,13 +28,14 @@ class SupportTicketCrew:
         
         print("✓ All agents initialized")
     
-    def process_ticket(self, ticket: Union[str, SupportTicketInput, Dict], order_context: Optional[OrderContext] = None) -> Dict:
+    def process_ticket(self, ticket: Union[str, SupportTicketInput, Dict], order_context: Optional[OrderContext] = None, max_retries: int = 2) -> Dict:
         """
-        Process a customer support ticket through all agents.
+        Process a customer support ticket through all agents with retry loop.
         
         Args:
             ticket: The customer support ticket (str, SupportTicketInput, or dict)
             order_context: Optional structured order information
+            max_retries: Maximum number of retry attempts for compliance failures
             
         Returns:
             Dict containing the results from each agent
@@ -59,7 +60,7 @@ class SupportTicketCrew:
         print(formatted_input)
         print("="*60)
         
-        # Task 1: Triage
+        # Task 1: Triage (runs once)
         triage_task = Task(
             description=f"""
             {get_triage_task_description()}
@@ -70,7 +71,7 @@ class SupportTicketCrew:
             expected_output="Structured triage analysis with issue category, missing information, and next steps"
         )
         
-        # Task 2: Policy Retrieval
+        # Task 2: Policy Retrieval (runs once)
         policy_task = Task(
             description=f"""
             {get_policy_retrieval_task_description()}
@@ -82,39 +83,120 @@ class SupportTicketCrew:
             context=[triage_task]
         )
         
-        # Task 3: Resolution Writing
-        resolution_task = Task(
-            description=f"""
-            {get_resolution_writer_task_description()}
-            
-            {formatted_input}
-            
-            Use the triage analysis and retrieved policies to write the response.
-            """,
-            agent=self.resolution_writer_agent,
-            expected_output="Complete customer response with policy citations",
-            context=[triage_task, policy_task]
+        # Run triage and policy retrieval once
+        initial_crew = Crew(
+            agents=[self.triage_agent, self.policy_retriever_agent],
+            tasks=[triage_task, policy_task],
+            process=Process.sequential,
+            verbose=True
         )
         
-        # Task 4: Compliance Check
-        compliance_task = Task(
-            description=f"""
-            {get_compliance_task_description()}
+        print("\n[Phase 1] Running Triage and Policy Retrieval...\n")
+        initial_crew.kickoff()
+        
+        # Retry loop for resolution writing and compliance
+        for attempt in range(max_retries + 1):
+            print(f"\n[Phase 2 - Attempt {attempt + 1}/{max_retries + 1}] Resolution Writing and Compliance Check...\n")
             
-            Review the drafted response for accuracy and compliance.
+            # Add compliance feedback to resolution task if this is a retry
+            compliance_feedback = ""
+            if attempt > 0:
+                compliance_feedback = f"""
+                
+                PREVIOUS ATTEMPT FAILED COMPLIANCE:
+                {previous_compliance_output}
+                
+                You MUST fix these issues in your response. Pay special attention to:
+                - Add missing citations
+                - Remove unsupported claims
+                - Fix factual inaccuracies
+                """
             
-            CRITICAL: If you find ANY of the following issues, you MUST output "COMPLIANCE_FAILED" at the start:
-            - Missing citations (no Document ID or Section)
-            - Unsupported claims (statements not backed by retrieved policy)
-            - Factual inaccuracies
-            - Hallucinated information
+            # Task 3: Resolution Writing
+            resolution_task = Task(
+                description=f"""
+                {get_resolution_writer_task_description()}
+                
+                {formatted_input}
+                
+                Use the triage analysis and retrieved policies to write the response.
+                {compliance_feedback}
+                """,
+                agent=self.resolution_writer_agent,
+                expected_output="Complete customer response with policy citations",
+                context=[triage_task, policy_task]
+            )
             
-            If compliance fails, the entire process will stop and require human review.
-            """,
-            agent=self.compliance_agent,
-            expected_output="Compliance review with approval status and any required corrections",
-            context=[triage_task, policy_task, resolution_task]
-        )
+            # Task 4: Compliance Check
+            compliance_task = Task(
+                description=f"""
+                {get_compliance_task_description()}
+                
+                Review the drafted response for accuracy and compliance.
+                
+                CRITICAL: If you find ANY of the following issues, you MUST output "COMPLIANCE_FAILED" at the start:
+                - Missing citations (no Document ID or Section)
+                - Unsupported claims (statements not backed by retrieved policy)
+                - Factual inaccuracies
+                - Hallucinated information
+                """,
+                agent=self.compliance_agent,
+                expected_output="Compliance review with approval status and any required corrections",
+                context=[triage_task, policy_task, resolution_task]
+            )
+            
+            # Run resolution and compliance
+            retry_crew = Crew(
+                agents=[self.resolution_writer_agent, self.compliance_agent],
+                tasks=[resolution_task, compliance_task],
+                process=Process.sequential,
+                verbose=True
+            )
+            
+            retry_crew.kickoff()
+            
+            # Check compliance status
+            compliance_output_str = str(compliance_task.output)
+            
+            # Check for escalation
+            if "ESCALATION_APPROVED" in compliance_output_str or "STATUS: ESCALATED" in compliance_output_str:
+                print("\n" + "="*60)
+                print("✓ REQUEST ESCALATED TO HUMAN REVIEW")
+                print("="*60)
+                break
+            
+            # Check for compliance failure
+            if "COMPLIANCE_FAILED" in compliance_output_str or "REJECTED" in compliance_output_str:
+                if attempt < max_retries:
+                    print(f"\n⚠️  Compliance failed on attempt {attempt + 1}. Retrying...")
+                    previous_compliance_output = compliance_output_str
+                    continue
+                else:
+                    print("\n" + "="*60)
+                    print("⚠️  COMPLIANCE CHECK FAILED - MAX RETRIES REACHED")
+                    print("="*60)
+                    print("\nThe response did not pass compliance after multiple attempts.")
+                    print("Issues found:")
+                    print(compliance_output_str)
+                    print("\n" + "="*60)
+                    
+                    return {
+                        'status': 'FAILED',
+                        'reason': 'Compliance check failed after retries',
+                        'final_output': 'Response blocked due to compliance issues. Human review required.',
+                        'triage_output': triage_task.output,
+                        'policy_output': policy_task.output,
+                        'resolution_output': resolution_task.output,
+                        'compliance_output': compliance_task.output,
+                        'attempts': attempt + 1
+                    }
+            else:
+                # Compliance passed!
+                print(f"\n✓ Compliance passed on attempt {attempt + 1}")
+                break
+        
+        # Final formatting
+        print("\n[Phase 3] Final Formatting...\n")
         
         final_task = Task(
             description=f"""
@@ -127,83 +209,38 @@ class SupportTicketCrew:
             context=[triage_task, policy_task, resolution_task, compliance_task]
         )
         
-        # Create crew with sequential process
-        crew = Crew(
-            agents=[
-                self.triage_agent,
-                self.policy_retriever_agent,
-                self.resolution_writer_agent,
-                self.compliance_agent,
-                self.final_formatter_agent
-            ],
-            tasks=[
-                triage_task,
-                policy_task,
-                resolution_task,
-                compliance_task,
-                final_task
-            ],
+        final_crew = Crew(
+            agents=[self.final_formatter_agent],
+            tasks=[final_task],
             process=Process.sequential,
             verbose=True
         )
         
-        # Execute the crew
-        print("\nStarting agent workflow...\n")
-        result = crew.kickoff()
+        result = final_crew.kickoff()
         
-        # Check compliance status
+        # Determine final status
         compliance_output_str = str(compliance_task.output)
         
-        # Check for escalation (valid response when not in policy)
         if "ESCALATION_APPROVED" in compliance_output_str or "STATUS: ESCALATED" in compliance_output_str:
-            print("\n" + "="*60)
-            print("✓ REQUEST ESCALATED TO HUMAN REVIEW")
-            print("="*60)
-            print("\nThis request is not covered by existing policies.")
-            print("Escalation to specialized support team approved.")
-            print("="*60)
-            
-            return {
-                'status': 'ESCALATED',
-                'reason': 'Request not covered by existing policies',
-                'final_output': result,
-                'triage_output': triage_task.output,
-                'policy_output': policy_task.output,
-                'resolution_output': resolution_task.output,
-                'compliance_output': compliance_task.output
-            }
-        
-        # Check for compliance failure
-        if "COMPLIANCE_FAILED" in compliance_output_str or "REJECTED" in compliance_output_str:
-            print("\n" + "="*60)
-            print("⚠️  COMPLIANCE CHECK FAILED - RUN BLOCKED")
-            print("="*60)
-            print("\nThe response did not pass compliance verification.")
-            print("Issues found:")
-            print(compliance_output_str)
-            print("\n" + "="*60)
-            
-            return {
-                'status': 'FAILED',
-                'reason': 'Compliance check failed',
-                'final_output': 'Response blocked due to compliance issues. Human review required.',
-                'triage_output': triage_task.output,
-                'policy_output': policy_task.output,
-                'resolution_output': resolution_task.output,
-                'compliance_output': compliance_task.output
-            }
+            status = 'ESCALATED'
+            reason = 'Request not covered by existing policies'
+        else:
+            status = 'SUCCESS'
+            reason = 'Processed successfully'
         
         print("\n" + "="*60)
         print("Ticket Processing Complete")
         print("="*60)
         
         return {
-            'status': 'SUCCESS',
+            'status': status,
+            'reason': reason,
             'final_output': result,
             'triage_output': triage_task.output,
             'policy_output': policy_task.output,
             'resolution_output': resolution_task.output,
-            'compliance_output': compliance_task.output
+            'compliance_output': compliance_task.output,
+            'attempts': attempt + 1
         }
 
 

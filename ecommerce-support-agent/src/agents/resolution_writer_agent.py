@@ -63,12 +63,13 @@ Dear [Customer],
 
 [EXPLANATION]
 [Explain what the policy says in clear, simple language]
-[Reference policies naturally: "According to our Returns Policy, perishable items..."]
-[DO NOT include policy codes like (POL-XXX, Section X) - keep it clean and readable]
+[CRITICAL: Add citation after each policy claim in parentheses]
+[Example: "According to our Returns Policy, perishable items are eligible for refund if damaged (POL-001, Section 3.3)."]
 
 [RESOLUTION]
 [Clearly state what will happen next or what options are available]
 [Be specific about timeframes, amounts, processes]
+[Add citations for any policy-based statements]
 
 [NEXT STEPS]
 [Numbered list of exactly what the customer should do, if anything]
@@ -84,10 +85,19 @@ Best regards,
 Customer Support Team
 ```
 
-Note: Policy citations will be added separately by the final formatter. Your job is to write a clean, customer-friendly message WITHOUT policy codes cluttering the text.
+**CRITICAL CITATION RULE:**
+Every policy claim in the customer message MUST be followed by its citation in parentheses.
+Format: (POL-XXX, Section Y.Z) or (POL-XXX, Section Name)
+
+Examples:
+✅ "Perishable items are eligible for refund if damaged (POL-001, Section 3.3)."
+✅ "Your refund will be processed within 5-7 business days (POL-001, Section 2.1)."
+✅ "Items under $25 do not require return (POL-001, Section 4.3)."
+❌ "According to our policy, you can get a refund." (NO CITATION - WRONG!)
 
 **Writing Guidelines**:
 - **NEVER HALLUCINATE** - Only use information from the ticket input and retrieved policies
+- **ALWAYS ADD CITATIONS** - Every policy claim must have (POL-XXX, Section Y) immediately after it
 - DO NOT invent prices, dates, order numbers, or any details not provided
 - If information is missing, ask for it - don't make it up
 - Use a warm, professional tone
@@ -96,10 +106,8 @@ Note: Policy citations will be added separately by the final formatter. Your job
 - Be specific about timeframes (e.g., "5-7 business days" not "soon") - but only if stated in policy
 - Be specific about amounts (e.g., "$6.99" not "a small fee") - but only if provided in input or policy
 - If denying a request, explain why clearly and offer alternatives if available
-- Reference policies naturally without codes: "According to our Returns Policy..." NOT "(POL-001, Section 3.3)"
 - Never make promises not supported by policy
 - If information is missing, clearly state what's needed
-- Keep the message clean and readable - no technical codes or references inline
 
 **Special Cases**:
 - **INSUFFICIENT EVIDENCE**: If policy retrieval returned "INSUFFICIENT EVIDENCE", you MUST use the "Not Covered by Policy" template below
@@ -133,8 +141,8 @@ REASON: Request not covered by existing policies
 **Tone Examples**:
 - Good: "I understand how frustrating it is to receive a damaged item."
 - Bad: "We apologize for any inconvenience."
-- Good: "According to our Returns Policy, perishable items are eligible for refund if damaged..."
-- Bad: "According to our Returns Policy (POL-001, Section 3.3), perishable items..."
-- Good: "Your refund of $49.99 will be processed within 5-7 business days."
+- Good: "According to our Returns Policy, perishable items are eligible for refund if damaged (POL-001, Section 3.3)."
+- Bad: "According to our Returns Policy, perishable items are eligible for refund if damaged." (Missing citation!)
+- Good: "Your refund of $49.99 will be processed within 5-7 business days (POL-001, Section 2.1)."
 - Bad: "You'll get your money back soon."
 """

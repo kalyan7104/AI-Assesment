@@ -53,43 +53,58 @@ Analyze the customer support ticket and perform the following:
    - Warranty
    - Other
 
-2. **Missing Information Check**: Identify if any critical information is missing:
-   - Order number
-   - Purchase date
-   - Item details (name, SKU, quantity)
-   - Issue description
-   - Customer contact information
-   - Desired resolution
-   - Any other relevant details for this specific issue type
+2. **Policy Conflict Detection**: Check for potential policy conflicts:
+   - If customer is in EU region (EU-*, UK, etc.) → EU consumer law applies (14-day cooling-off period)
+   - Check if marketplace seller vs platform policies differ
+   - Identify if platform, seller, and regional laws conflict
+   - If 2 or more policies conflict → Decision = NEEDS ESCALATION
 
-3. **Urgency Assessment**: Determine urgency level:
+3. **Missing Information Check**: Identify if any critical information is missing:
+   - ONLY ask for information that CHANGES the decision outcome
+   - Maximum 3 clarifying questions
+   - Do NOT ask for nice-to-have details (exact SKU, product name) unless they affect eligibility
+   - Required info varies by issue type:
+     * Returns: order date, region, item category, fulfillment type
+     * Shipping: order date, shipping method, tracking status
+     * Refunds: order date, payment method, issue type
+
+4. **Urgency Assessment**: Determine urgency level:
    - High: Time-sensitive issues (overnight shipping problems, urgent needs)
    - Medium: Standard issues requiring prompt attention
    - Low: General inquiries, non-urgent matters
 
-4. **Output Format**: Provide your analysis in this structure:
+5. **Output Format**: Provide your analysis in this structure:
    ```
    ISSUE CATEGORY: [Category name]
    CONFIDENCE: [0-100%]
-   CLARIFYING QUESTIONS:
-   - [Question 1]
-   - [Question 2]
-   - [Question 3]
+   
+   POLICY CONFLICTS DETECTED:
+   - [List any conflicting policies: EU law, seller policy, platform policy]
+   - [If 2+ conflicts exist, state "REQUIRES ESCALATION"]
+   
+   CLARIFYING QUESTIONS (MAX 3, only if answer changes decision):
+   - [Question 1 - only if critical]
+   - [Question 2 - only if critical]
+   - [Question 3 - only if critical]
+   
    URGENCY: [High/Medium/Low]
    
    MISSING INFORMATION:
-   - [List each missing piece of information, or state "None - all required information present"]
+   - [List each missing piece of information that affects the decision, or state "None - sufficient information to proceed"]
    
    SUMMARY:
    [Brief 1-2 sentence summary of the customer's issue]
    
    RECOMMENDED NEXT STEPS:
-   [What should happen next - either request missing info or proceed to policy retrieval]
+   [What should happen next - either request missing info, escalate due to conflicts, or proceed to policy retrieval]
    ```
 
-**IMPORTANT**: 
+**CRITICAL DECISION RULES**: 
+- If 2 or more policies conflict → Decision = NEEDS ESCALATION (do not make a decision)
+- If EU region detected (EU-*, UK) → always cite EU consumer law as a policy alongside seller and platform policies
+- Clarifying questions → maximum 3, only ask if the answer changes the decision outcome
+- Do NOT ask questions just for record-keeping purposes (e.g., exact SKU, product name unless it affects eligibility)
+- If you have order date, region, and issue type → you likely have enough to proceed
 - Be thorough but concise
 - Do not make assumptions about missing information
-- If order number is missing for order-related issues, flag it
-- Consider what information is actually needed for THIS specific issue type
 """

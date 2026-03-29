@@ -32,22 +32,32 @@ class VectorStore:
         # Determine provider
         self.provider = os.getenv("LLM_PROVIDER", "google").lower()
         
+        # For Groq, we need to use a different provider for embeddings
+        # since Groq doesn't provide embedding models
+        embedding_provider = self.provider
+        if self.provider == "groq":
+            # Default to Google for embeddings when using Groq
+            embedding_provider = os.getenv("EMBEDDING_PROVIDER", "google").lower()
+            print(f"Using Groq for LLM, {embedding_provider.upper()} for embeddings")
+        
         # Initialize embedding client based on provider
-        if self.provider == "openai":
+        if embedding_provider == "openai":
             if OpenAI is None:
                 raise ImportError("OpenAI package not installed. Run: pip install openai")
             self.openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             self.embedding_model = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
-        elif self.provider == "google":
+            self.embedding_provider = "openai"
+        elif embedding_provider == "google":
             if genai is None:
                 raise ImportError("Google GenAI package not installed. Run: pip install google-genai")
             client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
             self.genai_client = client
             self.embedding_model = "gemini-embedding-001"
+            self.embedding_provider = "google"
         else:
-            raise ValueError(f"Unsupported provider: {self.provider}. Use 'openai' or 'google'")
+            raise ValueError(f"Unsupported embedding provider: {embedding_provider}. Use 'openai' or 'google'")
         
-        print(f"Using {self.provider.upper()} for embeddings")
+        print(f"Using {embedding_provider.upper()} for embeddings")
         self._initialize_store()
     
     def _initialize_store(self):
@@ -97,9 +107,9 @@ class VectorStore:
     
     def _generate_embeddings(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings using configured provider."""
-        if self.provider == "openai":
+        if self.embedding_provider == "openai":
             return self._generate_openai_embeddings(texts)
-        elif self.provider == "google":
+        elif self.embedding_provider == "google":
             return self._generate_google_embeddings(texts)
     
     def _generate_openai_embeddings(self, texts: List[str]) -> List[List[float]]:
@@ -163,7 +173,7 @@ class VectorStore:
     def search(self, query: str, top_k: int = 5) -> List[Dict]:
         """Search for relevant documents using semantic similarity."""
         # Generate query embedding
-        if self.provider == "google":
+        if self.embedding_provider == "google":
             response = self.genai_client.models.embed_content(
                 model=self.embedding_model,
                 contents=query

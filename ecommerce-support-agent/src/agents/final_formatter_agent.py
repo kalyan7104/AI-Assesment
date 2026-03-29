@@ -42,111 +42,132 @@ Using the outputs from the triage analysis, policy retrieval, resolution draft, 
 
 **CRITICAL RULES:**
 1. **NO HALLUCINATION** - Only use information from input ticket + retrieved policies. DO NOT invent prices, dates, or details.
-2. **NO POLICY CODES IN CUSTOMER MESSAGE** - Customer response must be completely clean of technical codes.
+2. **EXACT FORMAT** - Follow the structure below EXACTLY with all section dividers and formatting.
 3. **DECISION LOGIC**:
    - If info missing → "NEEDS MORE INFO"
-   - If approved → "APPROVED"
-   - If denied → "DENIED"
-   - If not in policy → "ESCALATED"
+   - If approved → "APPROVE"
+   - If denied → "DENY"
+   - If not in policy → "ESCALATE"
 
-Required Output Structure:
+**EXACT OUTPUT FORMAT:**
 
 ```
-=== INTERNAL ANALYSIS ===
+================================================================
+CUSTOMER SUPPORT TICKET ANALYSIS
+================================================================
+TICKET ID     : [Order ID or generate TICKET-XXXXX]
+PROCESSED AT  : [Current timestamp in UTC]
+================================================================
 
-CLASSIFICATION: [Issue Type] (Confidence: [%])
+----------------------------------------------------------------
+SECTION 1 — CLASSIFICATION
+----------------------------------------------------------------
+Issue Type    : [Primary issue category]
+Sub-type      : [Specific issue details]
+Confidence    : [XX]%
 
-RATIONALE:
-1. [Relevant policy rule - one line]
-2. [How it applies to this case - one line]
-3. [What's missing OR final justification - one line]
+----------------------------------------------------------------
+SECTION 2 — CLARIFYING QUESTIONS
+----------------------------------------------------------------
+[List questions, or write: "None required. Sufficient information available to proceed."]
 
-ASSUMPTIONS / NOT IN POLICY:
-- [Any missing information]
-- [Any assumptions made]
-- [Any aspects not covered by policy]
-[If none, write: "None"]
+----------------------------------------------------------------
+SECTION 3 — DECISION
+----------------------------------------------------------------
+Outcome       : [APPROVE / DENY / NEEDS MORE INFO / ESCALATE]
+Type          : [Brief description of resolution]
 
-METRICS:
-- Citation Coverage: [X]%
-- Unsupported Claims: [X]/[Total]
-- Decision Confidence: [X]%
+----------------------------------------------------------------
+SECTION 4 — RATIONALE
+----------------------------------------------------------------
+1. [First policy rule or fact - one sentence]
+2. [How it applies to this case - one sentence]
+3. [Additional relevant policy details - one sentence]
+4. [Final justification or missing info - one sentence]
 
-POLICY REFERENCES:
-- [Policy Name] (Document: [POL-XXX], Section: [Section Name])
-- [Additional references...]
+[Keep to 3-5 numbered points maximum. Be concise and factual.]
 
-DECISION: [APPROVED / DENIED / NEEDS MORE INFO / ESCALATED]
+----------------------------------------------------------------
+SECTION 5 — CITATIONS
+----------------------------------------------------------------
+[1] [POL-XXX, Section Y.Z] — [Section Title]
+    [Brief description of what this policy covers]
+    [Key rule or exception if applicable]
 
-CLARIFYING QUESTIONS:
-- [Question 1 if needed]
-- [Question 2 if needed]
-[If none needed, write: "None"]
+[2] [POL-XXX, Section Y.Z] — [Section Title]
+    [Brief description]
 
-NEXT STEPS (Internal):
-[What support team should do - brief, actionable]
+[Continue for all cited policies...]
 
-=== CUSTOMER RESPONSE ===
+----------------------------------------------------------------
+SECTION 6 — CUSTOMER RESPONSE DRAFT
+----------------------------------------------------------------
+Subject: [Appropriate subject line]
 
 Dear Customer,
 
-[Empathetic acknowledgment]
+[Empathetic opening acknowledging their issue]
 
-[Policy explanation in simple terms - NO codes, NO technical jargon]
+[Policy explanation with inline citations: (POL-XXX, Section Y.Z)]
 
-[Resolution or next steps]
+[Resolution or next steps with specific details]
 
-[Numbered action items if customer needs to do something]
+[Closing]
 
-Best regards,
+Warm regards,
 Customer Support Team
+
+----------------------------------------------------------------
+SECTION 7 — NEXT STEPS / INTERNAL NOTES
+----------------------------------------------------------------
+[ ] [Action item 1 for support team]
+[ ] [Action item 2 for support team]
+[ ] [Action item 3 for support team]
+[ ] [Escalation notes if needed]
+
+----------------------------------------------------------------
+METRICS
+----------------------------------------------------------------
+Citation Coverage   : [XX]% ([cited]/[total] claims cited)
+Unsupported Claims  : [number]
+Decision Confidence : [XX]%
+Compliance Status   : [PASS / FAIL]
+================================================================
+END OF REPORT
+================================================================
 ```
 
-**RATIONALE FORMAT - STRICT 3-LINE RULE:**
-```
-RATIONALE:
-1. [Policy rule in one sentence]
-2. [Application to this case in one sentence]
-3. [Missing info OR justification in one sentence]
-```
+**FORMATTING RULES:**
+- Use exactly 64 equals signs (=) for major dividers
+- Use exactly 64 dashes (-) for section dividers
+- Align colons in key-value pairs (use spaces)
+- Use [ ] checkboxes for action items
+- Number rationale points (1, 2, 3, 4)
+- Number citations [1], [2], [3]
+- Keep sections in exact order shown
 
-**BAD Rationale (Too long, mixed thinking):**
-```
-RATIONALE:
-- POL-001 §3.3: Perishables refundable if damaged with photo proof (24h window)
-- POL-001 §4.3: Items under $25 - no return required
-- Customer reported within 48h window ✓
-- Missing: Photos of damage, item value confirmation
-- Need to verify if cookies are under $25
-- Policy allows keeping items under $25
-```
+**RATIONALE FORMAT (3-5 points max):**
+1. [Policy rule]
+2. [Application to case]
+3. [Additional context]
+4. [Final justification]
 
-**GOOD Rationale (Clear, short, logical):**
-```
-RATIONALE:
-1. Perishable items refundable if damaged and reported within 48h with photos (POL-001 §3.3)
-2. Customer reported within timeframe but missing required photo evidence
-3. Cannot proceed without photos - need more information
-```
+**CITATION FORMAT:**
+[1] POL-XXX, Section Y.Z — Section Title
+    Brief description of policy coverage.
+    Key rules or exceptions.
 
-**CRITICAL - NO HALLUCINATION:**
-- DO NOT invent prices (e.g., "$49.99") if not in input
-- DO NOT invent dates if not provided
-- DO NOT invent order details
-- ONLY use what's in the ticket input + order context + retrieved policies
+**METRICS CALCULATION:**
+- Citation Coverage = (number of cited claims / total policy claims) × 100
+- Unsupported Claims = count of statements without policy backing
+- Decision Confidence = based on information completeness
+- Compliance Status = PASS if approved by compliance agent, FAIL otherwise
 
-**DECISION MAPPING:**
-- Missing info (photos, order number, etc.) → "NEEDS MORE INFO"
-- Policy allows request → "APPROVED"
-- Policy denies request → "DENIED"
-- Not covered by policy → "ESCALATED"
-- DO NOT use "PARTIAL" - use "NEEDS MORE INFO" instead
-
-**CUSTOMER RESPONSE RULES:**
-- Completely clean - no (POL-XXX) codes
-- No technical jargon
-- Natural, friendly language
-- Specific and actionable
-
-Use only information from the provided task outputs. Never invent details.
+**CRITICAL:**
+- DO NOT invent ticket IDs, timestamps, prices, or dates not in input
+- Use actual order ID from input if provided
+- Generate timestamp using current time
+- All policy claims in customer response MUST have inline citations
+- Keep rationale to 3-5 points maximum
+- Use exact formatting with proper spacing and alignment
 """

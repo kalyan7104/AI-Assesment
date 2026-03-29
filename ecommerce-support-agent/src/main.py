@@ -176,11 +176,19 @@ def main():
             print("\n❌ ERROR: Google API key not configured!")
             print("Please set GOOGLE_API_KEY in your .env file")
             return
-    else:
+    elif provider == "openai":
         if not os.getenv("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY") == "your_openai_api_key_here":
             print("\n❌ ERROR: OpenAI API key not configured!")
             print("Please set OPENAI_API_KEY in your .env file")
             return
+    elif provider == "groq":
+        if not os.getenv("GROQ_API_KEY"):
+            print("\n❌ ERROR: Groq API key not configured!")
+            print("Please set GROQ_API_KEY in your .env file")
+            return
+    else:
+        print(f"\n❌ ERROR: Unsupported provider: {provider}. Use 'openai', 'google', or 'groq'")
+        return
     
     # Check if vector store exists
     persist_dir = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")

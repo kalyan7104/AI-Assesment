@@ -99,6 +99,9 @@ python src/main.py --ticket "My order #12345 arrived damaged, I want a refund"
 
 # Run built-in examples
 python src/main.py --examples
+
+#TO run the APP
+python app.py
 ```
 
 ### Python API

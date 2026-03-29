@@ -1,6 +1,7 @@
 # Core Dependencies - Multi-agent framework
-crewai>=0.28.0
+crewai[litellm]>=0.28.0
 crewai-tools>=0.1.0
+litellm>=1.0.0
 
 # LLM and Embeddings
 openai>=1.0.0
